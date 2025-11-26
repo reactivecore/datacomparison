@@ -9,7 +9,11 @@ trait Shared extends PlatformScalaModule {
 }
 
 trait SharedJS extends Shared, ScalaJSModule {
-  def scalaJSVersion = "1.19.0"
+  def scalaJSVersion = "1.20.1"
+}
+
+trait SharedNative extends Shared, ScalaNativeModule {
+  override def scalaNativeVersion = "0.5.9"
 }
 
 trait SharedTestModule extends TestModule.ScalaTest {
@@ -23,5 +27,9 @@ object `package` extends Module {
 
   object js extends SharedJS {
     object test extends ScalaJSTests, SharedTestModule
+  }
+
+  object native extends SharedNative {
+    object test extends ScalaNativeTests, SharedTestModule
   }
 }
