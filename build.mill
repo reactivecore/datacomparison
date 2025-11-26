@@ -1,0 +1,27 @@
+package build
+import mill.*
+import scalalib.*
+import scalajslib.*
+import scalanativelib.*
+
+trait Shared extends PlatformScalaModule {
+  def scalaVersion = "3.7.4"
+}
+
+trait SharedJS extends Shared, ScalaJSModule {
+  def scalaJSVersion = "1.19.0"
+}
+
+trait SharedTestModule extends TestModule.ScalaTest {
+  override def scalaTestVersion = "3.2.19"
+}
+
+object `package` extends Module {
+  object jvm extends Shared {
+    object test extends ScalaTests, SharedTestModule
+  }
+
+  object js extends SharedJS {
+    object test extends ScalaJSTests, SharedTestModule
+  }
+}
