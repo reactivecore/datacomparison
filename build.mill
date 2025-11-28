@@ -14,10 +14,10 @@ val versionTag = gitTag
   .filter(_.startsWith("v"))
   .map(_.stripPrefix("v"))
 
-val snapshotVersion = "0.1-SNAPSHOT"
+val snapshotVersion = "0.2-SNAPSHOT"
 val artefactVersion = versionTag.getOrElse(snapshotVersion)
 
-trait Shared extends PlatformScalaModule, PublishModule {
+trait Shared extends PlatformScalaModule, SonatypeCentralPublishModule {
   def scalaVersion = "3.7.4"
 
   def publishVersion = artefactVersion
@@ -30,6 +30,8 @@ trait Shared extends PlatformScalaModule, PublishModule {
     versionControl = VersionControl.github("reactivecore", "datacomparison"),
     developers = Seq(Developer("nob13", "Norbert Schultz", "https://www.reactivecore.de"))
   )
+
+  override def artifactName = "datacomparison"
 }
 
 trait SharedJS extends Shared, ScalaJSModule {
