@@ -1,11 +1,35 @@
 package build
 import mill.*
 import scalalib.*
+import scalalib.publish.*
 import scalajslib.*
 import scalanativelib.*
 
-trait Shared extends PlatformScalaModule {
+val gitTag: Option[String] = sys.env.get("GITHUB_REF").flatMap { ref =>
+  if (ref.startsWith("refs/tags/")) Some(ref.stripPrefix("refs/tags/"))
+  else None
+}
+
+val versionTag = gitTag
+  .filter(_.startsWith("v"))
+  .map(_.stripPrefix("v"))
+
+val snapshotVersion = "0.1-SNAPSHOT"
+val artefactVersion = versionTag.getOrElse(snapshotVersion)
+
+trait Shared extends PlatformScalaModule, PublishModule {
   def scalaVersion = "3.7.4"
+
+  def publishVersion = artefactVersion
+
+  def pomSettings = PomSettings(
+    description = "data comparison library",
+    organization = "net.reactivecore",
+    url = "https://github.com/reactivecore/datacomparison",
+    licenses = Seq(License.`Apache-2.0`),
+    versionControl = VersionControl.github("reactivecore", "datacomparison"),
+    developers = Seq(Developer("nob13", "Norbert Schultz", "https://www.reactivecore.de"))
+  )
 }
 
 trait SharedJS extends Shared, ScalaJSModule {
