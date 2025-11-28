@@ -15,6 +15,7 @@ jobs:
           java-version: '21'
       - run: ./mill mill.javalib.SonatypeCentralPublishModule/
         env:
+          MILL_PGP_PASSPHRASE: ${{ secrets.PGP_SECRET_PASSPHRASE }}
           MILL_PGP_SECRET_BASE64: ${{ secrets.PGP_SECRET_BASE64 }}
           MILL_SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
           MILL_SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
