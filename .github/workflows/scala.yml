@@ -22,6 +22,5 @@ jobs:
         java-version: '21'
         distribution: 'temurin'
         cache: 'sbt'
-    - uses: sbt/setup-sbt@v1
     - name: Run tests
       run: ./mill _.test
