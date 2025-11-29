@@ -9,6 +9,10 @@ test:
 check-lint:
   ./mill _.fix --check
 
-lint:
+lint: scalafix scalafmt
+
+scalafix:
   ./mill _.fix
 
+scalafmt:
+  ./mill mill.scalalib.scalafmt/
