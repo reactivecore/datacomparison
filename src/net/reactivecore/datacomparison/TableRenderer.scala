@@ -85,38 +85,30 @@ case class TableRenderer(settings: Settings) {
   }
 
   private def renderNormalized(sb: StringBuilder, normalized: Table, columnWidths: Seq[Int]): Unit = {
-    var first      = true
-    val fullLength = columnWidths.sum + normalized.columns.size - 1
+    if (normalized.isEmpty) {
+      return
+    }
+    sb += settings.columnSeparator
     normalized.columns.view.zip(columnWidths).foreach { case (header, len) =>
-      if first then {
-        sb += settings.columnSeparator
-      }
-      first = false
       sb ++= formatCell(header, len)
       sb += settings.columnSeparator
     }
-    sb += '\n'
 
-    first = true
+    sb += '\n'
+    sb += settings.columnSeparator
+
     columnWidths.foreach { width =>
-      if first then {
-        sb += settings.columnSeparator
-      }
-      first = false
-      for i <- 0 until width do {
+      for _ <- 0 until width do {
         sb += settings.rowSeparator
       }
       sb += settings.columnSeparator
     }
+
     sb += '\n'
 
     normalized.rows.view.take(settings.maxRows).foreach { row =>
-      first = true
+      sb += settings.columnSeparator
       row.view.zip(columnWidths).foreach { case (cell, len) =>
-        if first then {
-          sb += settings.columnSeparator
-        }
-        first = false
         sb ++= formatCell(cell, len)
         sb += settings.columnSeparator
       }

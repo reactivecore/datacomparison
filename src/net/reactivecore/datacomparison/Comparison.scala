@@ -48,7 +48,7 @@ case class SameElementComparison[T](
             IndexedSeq(key, expected, got)
           }
           val comparisonTable = Table(IndexedSeq("Key", "Expected", "Got"), rows)
-          sb ++= s"Comparison: "
+          sb ++= "Comparison: "
           renderer.renderPrettyTo(comparisonTable, sb)
           sb += '\n'
         }
