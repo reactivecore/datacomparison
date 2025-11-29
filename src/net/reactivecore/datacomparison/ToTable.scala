@@ -31,15 +31,11 @@ object ToTable {
   inline def derived[T <: Product](using m: Mirror.ProductOf[T]): ToTable[T] = {
     val labels        = deriveLabels[T].toVector
     val cellExtractor = deriveCellExtractor[T]
-    new StaticToTable[T] {
-      override def columns: Seq[String] = {
-        labels
-      }
+    DerivedToTable(labels, cellExtractor)
+  }
 
-      override def row(value: T): Seq[String] = {
-        cellExtractor(value).toVector
-      }
-    }
+  private case class DerivedToTable[T](columns: Seq[String], cellExtractor: T => Seq[String]) extends StaticToTable[T] {
+    override def row(value: T): Seq[String] = cellExtractor(value).toVector
   }
 
   private inline def deriveLabels[T](using m: Mirror.Of[T]): List[String] = {

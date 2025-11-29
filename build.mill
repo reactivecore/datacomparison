@@ -1,9 +1,14 @@
+//| mvnDeps:
+//| - com.goyeau::mill-scalafix::0.6.0
+//| mill-version: 1.0.6
+
 package build
 import mill.*
 import scalalib.*
 import scalalib.publish.*
 import scalajslib.*
 import scalanativelib.*
+import com.goyeau.mill.scalafix.ScalafixModule
 
 val gitTag: Option[String] = sys.env.get("GITHUB_REF").flatMap { ref =>
   if (ref.startsWith("refs/tags/")) Some(ref.stripPrefix("refs/tags/"))
@@ -17,7 +22,7 @@ val versionTag = gitTag
 val snapshotVersion = "0.2-SNAPSHOT"
 val artefactVersion = versionTag.getOrElse(snapshotVersion)
 
-trait Shared extends PlatformScalaModule, SonatypeCentralPublishModule {
+trait Shared extends PlatformScalaModule, SonatypeCentralPublishModule, ScalafixModule {
   def scalaVersion = "3.7.4"
 
   def publishVersion = artefactVersion
@@ -32,6 +37,13 @@ trait Shared extends PlatformScalaModule, SonatypeCentralPublishModule {
   )
 
   override def artifactName = "datacomparison"
+
+  override def scalacOptions = Seq(
+    "-Wunused:all",
+    "-Wunused:strict-no-implicit-warn",
+    "-Wconf:any:e",
+    "-Wconf:msg=unused private member&src=test/*:silent" // Do not care about unused stuff in Testcases
+  )
 }
 
 trait SharedJS extends Shared, ScalaJSModule {

@@ -25,16 +25,18 @@ object GenericCellRenderer extends LowPrioGenericCellRenderer {
 
   inline given productRenderer[T <: Product](using m: Mirror.ProductOf[T]): GenericCellRenderer[T] = {
     val gt = ToTable.derived[T]
-    new GenericCellRenderer[T] {
-      override def render(value: T): String = {
-        val table = gt.toTable(Seq(value))
-        table.columns.view
-          .zip(table.rows.head)
-          .map { case (k, v) =>
-            s"${k}: ${v}"
-          }
-          .mkString("{", ",", "}")
-      }
+    DerivedCellRenderer(gt)
+  }
+
+  private case class DerivedCellRenderer[T](toTable: ToTable[T]) extends GenericCellRenderer[T] {
+    override def render(value: T): String = {
+      val table = toTable.toTable(Seq(value))
+      table.columns.view
+        .zip(table.rows.head)
+        .map { case (k, v) =>
+          s"${k}: ${v}"
+        }
+        .mkString("{", ",", "}")
     }
   }
 }
