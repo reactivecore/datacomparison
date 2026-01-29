@@ -23,7 +23,7 @@ val snapshotVersion = "0.2-SNAPSHOT"
 val artefactVersion = versionTag.getOrElse(snapshotVersion)
 
 trait Shared extends PlatformScalaModule, SonatypeCentralPublishModule, ScalafixModule {
-  def scalaVersion = "3.7.4"
+  def scalaVersion = "3.8.1"
 
   def publishVersion = artefactVersion
 
