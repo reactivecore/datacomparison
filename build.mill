@@ -47,7 +47,7 @@ trait Shared extends PlatformScalaModule, SonatypeCentralPublishModule, Scalafix
 }
 
 trait SharedJS extends Shared, ScalaJSModule {
-  def scalaJSVersion = "1.20.1"
+  def scalaJSVersion = "1.20.2"
 }
 
 trait SharedNative extends Shared, ScalaNativeModule {
