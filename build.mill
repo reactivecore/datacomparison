@@ -55,7 +55,7 @@ trait SharedNative extends Shared, ScalaNativeModule {
 }
 
 trait SharedTestModule extends TestModule.ScalaTest {
-  override def scalaTestVersion = "3.2.19"
+  override def scalaTestVersion = "3.2.20"
 }
 
 object `package` extends Module {
